@@ -50,6 +50,8 @@ import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.YAxis;
 import com.mbientlab.metawear.RouteManager;
 
+import org.w3c.dom.Text;
+
 import java.io.File;
 import java.util.ArrayList;
 
@@ -61,10 +63,10 @@ public abstract class SensorFragment extends ModuleFragmentBase {
     protected int sampleCount;
     protected float min, max;
     protected RouteManager streamRouteManager= null;
-
     private byte globalLayoutListenerCounter= 0;
     private final int layoutId;
     public static boolean samplingFlag = false;
+    public static int stepNum = 0;
 
     private final Runnable updateChartTask= new Runnable() {
         @Override
@@ -107,7 +109,6 @@ public abstract class SensorFragment extends ModuleFragmentBase {
                     LineChart.LayoutParams params = chart.getLayoutParams();
                     params.height = scrollView.getHeight();
                     chart.setLayoutParams(params);
-
                     globalLayoutListenerCounter--;
                     if (globalLayoutListenerCounter < 0) {
                         scrollView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
@@ -153,19 +154,17 @@ public abstract class SensorFragment extends ModuleFragmentBase {
                     chart.setVisibleXRangeMaximum(sampleCount);
                     new CountStepActivity().stepCount();
                     clean();
+                    System.out.println("stepNumber: "+stepNum);
+                     TextView textView = (TextView) view.findViewById(R.id.ShowStepNum);
+                textView.setText(String.valueOf(stepNum));
                     if (streamRouteManager != null) {
                         streamRouteManager.remove();
                         streamRouteManager = null;
                     }
-
                     chartHandler.removeCallbacks(updateChartTask);
                 }
             }
-
         });
-
-
-
         /*Button saveButton= (Button) view.findViewById(R.id.layout_two_button_right);
         saveButton.setText(R.string.label_save);
         saveButton.setOnClickListener(new View.OnClickListener() {

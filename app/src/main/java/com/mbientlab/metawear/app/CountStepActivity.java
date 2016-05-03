@@ -1,23 +1,8 @@
 package com.mbientlab.metawear.app;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.FragmentManager;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.hardware.Sensor;
-import android.nfc.Tag;
 import android.util.Log;
-import android.widget.TextView;
-
-import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
-
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.LinkedList;
 
@@ -30,15 +15,13 @@ public class CountStepActivity extends Activity{
 
     private final int STANDING = 0; // 站着
     private final int LYING = 1; // 平躺
-    private final int THRESHOLD=8;
+    private final int THRESHOLD=18;
     private final int MIN_DISTANCE=7;
     private final int MAX_DISTANCE=40;
     private int mStep = 0;
     private final int FILTER_NUM = 8;
-    private final int NUMBER = 20;
+    private final int NUMBER = 35;
     private int peak = 0;
-    private int count = 0;
-    public TextView textView;
     private ArrayList<Float> acceleData = new ArrayList<Float>();
     private float bigger = 0;
     public static final String TAG = "Sensor";
@@ -60,7 +43,6 @@ public class CountStepActivity extends Activity{
                         ThreeAxisChartFragment.yValue.get(i) * ThreeAxisChartFragment.yValue.get(i) +
                         ThreeAxisChartFragment.zValue.get(i) * ThreeAxisChartFragment.zValue.get(i)));
                 bigger = acceleData.get(i) * 10;
-                //getStatutes(acceleData.get(i));
                 filter(bigger);
             }
             // 取数据，计算步数。
@@ -72,16 +54,7 @@ public class CountStepActivity extends Activity{
             }else {
                 countStep(); // 计算步数
                 System.out.println("stepNumber: " + getStepNumber());
-                //((TextView)findViewById(R.id.ShowStepNum)).setText("12");
-                /*new AlertDialog.Builder(CountStepActivity.this)
-
-                        .setTitle("标题")
-
-                        .setMessage("计步结果为：" + getStringNum())
-
-                        .setPositiveButton("确定", null)
-
-                        .show();*/
+                SensorFragment.stepNum = mStep;
             }
 
         }
@@ -112,7 +85,6 @@ public class CountStepActivity extends Activity{
             Log.w(TAG,"peakNum: "+peakposition.size());
             Log.w(TAG,"valleryNum: "+valleryposition.size());
         }
-        /**/
     }
 
     private void filter(float data) {

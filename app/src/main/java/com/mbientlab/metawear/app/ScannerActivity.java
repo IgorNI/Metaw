@@ -1,5 +1,6 @@
 package com.mbientlab.metawear.app;
 
+
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothDevice;
 import android.content.ComponentName;
@@ -16,7 +17,9 @@ import com.mbientlab.metawear.MetaWearBleService;
 import com.mbientlab.metawear.MetaWearBoard;
 
 import java.util.UUID;
-
+/**
+ * Created by nilif on 2016/5/3.
+ */
 public class ScannerActivity extends AppCompatActivity implements ScannerCommunicationBus, ServiceConnection {
     private final static UUID[] serviceUuids;
     public static final int REQUEST_START_APP= 1;
@@ -118,3 +121,4 @@ public class ScannerActivity extends AppCompatActivity implements ScannerCommuni
         return 10000L;
     }
 }
+

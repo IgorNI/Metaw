@@ -1,5 +1,6 @@
 package com.mbientlab.metawear.app;
 
+
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.Dialog;
@@ -59,6 +60,9 @@ import java.io.InputStream;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
+/**
+ * Created by nilif on 2016/5/3.
+ */
 
 public class NavigationActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, ServiceConnection, FragmentBus, LoaderManager.LoaderCallbacks<Cursor> {
     public final static String EXTRA_BT_DEVICE= "com.mbientlab.metawear.app.NavigationActivity.EXTRA_BT_DEVICE";
@@ -538,10 +542,6 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
     private boolean checkLocationPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
                 checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            // Permission code taken from Radius Networks
-            // http://developer.radiusnetworks.com/2015/09/29/is-your-beacon-app-ready-for-android-6.html
-
-            // Android M Permission check
             final AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle(R.string.title_request_permission);
             builder.setMessage(R.string.permission_read_external_storage);
@@ -571,7 +571,4 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
         }
     }
 
-    public void seee(){
-        System.out.println("!");
-    }
 }
