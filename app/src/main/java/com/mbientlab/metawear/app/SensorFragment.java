@@ -54,19 +54,25 @@ import org.w3c.dom.Text;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import httpclient.http.HttpUrl;
+import httpclient.service.PatientService;
 
 public abstract class SensorFragment extends ModuleFragmentBase {
     private static final float FPS= 30.f;
     private static final long UPDATE_PERIOD= (long) ((1 / FPS) * 1000L);
+
     protected final ArrayList<String> chartXValues= new ArrayList<>();
-    public static LineChart chart;
+    protected LineChart chart;
     protected int sampleCount;
+
     protected float min, max;
     protected RouteManager streamRouteManager= null;
+
     private byte globalLayoutListenerCounter= 0;
     private final int layoutId;
-    public static boolean samplingFlag = false;
-    public static int stepNum = 0;
 
     private final Runnable updateChartTask= new Runnable() {
         @Override
@@ -109,6 +115,7 @@ public abstract class SensorFragment extends ModuleFragmentBase {
                     LineChart.LayoutParams params = chart.getLayoutParams();
                     params.height = scrollView.getHeight();
                     chart.setLayoutParams(params);
+
                     globalLayoutListenerCounter--;
                     if (globalLayoutListenerCounter < 0) {
                         scrollView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
@@ -131,32 +138,26 @@ public abstract class SensorFragment extends ModuleFragmentBase {
         chart.invalidate();
         chart.setDescription(null);
 
-       /* Button clearButton= (Button) view.findViewById(R.id.layout_two_button_left);
+        Button clearButton= (Button) view.findViewById(R.id.layout_two_button_left);
         clearButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 refreshChart(true);
             }
         });
-        clearButton.setText(R.string.label_clear);*/
+        clearButton.setText(R.string.label_clear);
 
         ((Switch) view.findViewById(R.id.sample_control)).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                // send a SamlingFlag
                 if (b) {
-                    samplingFlag = true; //如果开着，则将samplingFlag设为 true；
                     moveViewToLast();
                     setup();
+                    chartHandler.postDelayed(updateChartTask, UPDATE_PERIOD);
                 } else {
-                    samplingFlag = false; // 如果没开，则将samplingFlag设为false；
                     chart.setVisibleXRangeMinimum(1);
                     chart.setVisibleXRangeMaximum(sampleCount);
-                    new CountStepActivity().stepCount();
                     clean();
-                    System.out.println("stepNumber: "+stepNum);
-                     TextView textView = (TextView) view.findViewById(R.id.ShowStepNum);
-                textView.setText(String.valueOf(stepNum));
                     if (streamRouteManager != null) {
                         streamRouteManager.remove();
                         streamRouteManager = null;
@@ -165,7 +166,8 @@ public abstract class SensorFragment extends ModuleFragmentBase {
                 }
             }
         });
-        /*Button saveButton= (Button) view.findViewById(R.id.layout_two_button_right);
+
+        Button saveButton= (Button) view.findViewById(R.id.layout_two_button_right);
         saveButton.setText(R.string.label_save);
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -183,7 +185,7 @@ public abstract class SensorFragment extends ModuleFragmentBase {
                     startActivity(Intent.createChooser(intent, "Saving Data"));
                 }
             }
-        });*/
+        });
     }
 
     protected void refreshChart(boolean clearData) {
@@ -203,18 +205,8 @@ public abstract class SensorFragment extends ModuleFragmentBase {
         chart.getAxisRight().setEnabled(false);
     }
 
-    public static boolean getSamplingFlag(){
-        return samplingFlag;
-    }
-
-    public LineChart getChart(){
-        return chart;
-    }
-
     protected abstract void setup();
     protected abstract void clean();
     protected abstract String saveData();
     protected abstract void resetData(boolean clearData);
-
-
 }

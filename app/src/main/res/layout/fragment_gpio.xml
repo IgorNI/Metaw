@@ -38,8 +38,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin" >
 
     <include layout="@layout/component_sampling_control" />
-
-
+    <include layout="@layout/layout_two_button"/>
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
@@ -50,20 +49,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <android.support.design.widget.TextInputLayout
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                app:hintTextAppearance="@style/EditTextLabel"
-                android:hint="@string/config_name_gpio_pin"
-                android:id="@+id/gpio_pin_wrapper"
+            <TextView
+                android:text="@string/select_chart"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:id="@+id/gpio_select_chart_title"/>
 
-                <EditText android:id="@+id/gpio_pin_value"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="number" />
-
-            </android.support.design.widget.TextInputLayout>
+            <Spinner
+                android:id="@+id/gpio_select_chart"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
             <TextView
                 android:text="@string/config_name_gpio_read_mode"
@@ -77,7 +73,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
-            <TextView
+            <!--<TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
@@ -144,9 +140,33 @@
                     android:text="@string/value_gpio_pull_none"
                     style="?android:attr/buttonBarButtonStyle"
                     android:id="@+id/gpio_digital_none" />
-            </LinearLayout>
+            </LinearLayout>-->
 
-            <include layout="@layout/component_line_chart" />
+            <com.github.mikephil.charting.charts.LineChart
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/data_chart"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"
+               />
+            <com.github.mikephil.charting.charts.LineChart
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/data_chart2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"/>
+            <com.github.mikephil.charting.charts.LineChart
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/data_chart3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"/>
+            <com.github.mikephil.charting.charts.LineChart
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/data_chart4"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"/>
 
         </LinearLayout>
     </ScrollView>

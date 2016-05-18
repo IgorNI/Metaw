@@ -1,9 +1,8 @@
 package httpclient.common;
 
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
-
-
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONTokener;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -12,43 +11,30 @@ import java.util.Map;
 /**
  * Created by nilif on 2016/5/3.
  */
+
 public class JsonUtil {
 
-    // public static JSONArray ArrayToJson() {
-    //
-    // String[] arr = { "asd", "dfgd", "asd", "234" };
-    // return JSONArray.fromObject(arr);
-    //
-    // }
-
-    // 对象转换成JSON
-    public JSONArray ObjectToJSON(Object object) {
-        return JSONArray.fromObject(object);
-    }
-
-    // Map转换成json， 是用jsonObject
-    public static JSONObject testMapToJSON(Map<String, Object> map) {
-        return JSONObject.fromObject(map);
-    }
-
-    // List转换成JSON
-    public static JSONArray ListToJSON(List<Object> list) {
-        return JSONArray.fromObject(list);
-    }
-
-    //将json格式的字符串解析成Map对象
-    public static HashMap<Object, Object> JsontoMap(Object object) {
-        HashMap<Object, Object> data = new HashMap<Object, Object>();
-        // 将json字符串转换成jsonObject
-        JSONObject jsonObject = JSONObject.fromObject(object);
-        Iterator<?> it = jsonObject.keys();
-        // 遍历jsonObject数据，添加到Map对象
-        while (it.hasNext()) {
-            Object key = String.valueOf(it.next());
-            Object value = (Object) jsonObject.get(key);
-            data.put(key, value);
-        }
-        return data;
-    }
+   public static Map<String, String> JsontoMap(String object){
+		try {
+		    JSONTokener jsonParser = new JSONTokener(object);
+		    // 此时还未读取任何json文本，直接读取就是一个JSONObject对象。
+		    // 如果此时的读取位置在"name" : 了，那么nextValue就是"yuanzhifei89"（String）
+		    JSONObject person = (JSONObject) jsonParser.nextValue();
+		    // 接下来的就是JSON对象的操作了
+		    Iterator<String> keyIter= person.keys();
+			String key;
+			String value ;
+			Map<String, String> valueMap = new HashMap<String, String>();
+			while (keyIter.hasNext()) {
+				key = keyIter.next();
+				value = person.get(key).toString();
+				valueMap.put(key, value);
+			}
+			return valueMap;
+		} catch (JSONException ex) {
+		    // 异常处理代码
+		}
+		return null;
+	}
 
     }

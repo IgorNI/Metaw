@@ -27,6 +27,9 @@ import java.util.Locale;
  * Created by nilif on 2016/5/3.
  */
 public abstract class ModuleFragmentBase extends Fragment implements ServiceConnection {
+    protected ModuleFragmentBase() {
+    }
+
     public interface FragmentBus {
         BluetoothDevice getBtDevice();
         void resetConnectionStateHandler(long delay);

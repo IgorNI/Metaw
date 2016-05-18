@@ -1,5 +1,7 @@
+/**
+ * Created by nilif on 2016/5/3.
+ */
 package com.mbientlab.metawear.app;
-
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -20,9 +22,10 @@ import com.mbientlab.metawear.UnsupportedModuleException;
 import com.mbientlab.metawear.app.help.HelpOptionAdapter;
 import com.mbientlab.metawear.module.Led;
 import com.mbientlab.metawear.module.Switch;
-/**
- * Created by nilif on 2016/5/3.
- */
+/*
+* 显示主页
+*
+* */
 public class HomeFragment extends ModuleFragmentBase {
     private Led ledModule;
 

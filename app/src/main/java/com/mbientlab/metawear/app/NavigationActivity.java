@@ -71,11 +71,18 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
     private static final String EXTRA_URI = "uri";
     private final static String FRAGMENT_KEY= "com.mbientlab.metawear.app.NavigationActivity.FRAGMENT_KEY";
     private final static Map<Integer, Class<? extends ModuleFragmentBase>> FRAGMENT_CLASSES;
+    private static Intent httpPsotIntent;
+    private static Intent countStepIntent;
+    private static Intent pressureIntent;
+
 
     static {
         Map<Integer, Class<? extends ModuleFragmentBase>> tempMap= new LinkedHashMap<>();
         tempMap.put(R.id.nav_home, HomeFragment.class);
         tempMap.put(R.id.nav_accelerometer, AccelerometerFragment.class);
+        tempMap.put(R.id.nav_gpio, GpioPressueFragment.class);
+        tempMap.put(R.id.nav_me,MyInformationFragment.class);
+        tempMap.put(R.id.nav_setting,SettingFragment.class);
 
         FRAGMENT_CLASSES= Collections.unmodifiableMap(tempMap);
     }
@@ -339,6 +346,12 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
 
         btDevice= getIntent().getParcelableExtra(EXTRA_BT_DEVICE);
         getApplicationContext().bindService(new Intent(this, MetaWearBleService.class), this, BIND_AUTO_CREATE);
+        /*httpPsotIntent = new Intent(this,MyIntentService.class);
+        startService(httpPsotIntent);*/
+        countStepIntent = new Intent(this,CountStepService.class);
+        startService(countStepIntent);
+
+
     }
 
     @Override
@@ -452,6 +465,7 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
         String fragmentTag= FRAGMENT_CLASSES.get(id).getCanonicalName();
         currentFragment= fragmentManager.findFragmentByTag(fragmentTag);
 
+        // 获取当前的fragment
         if (currentFragment == null) {
             try {
                 currentFragment= FRAGMENT_CLASSES.get(id).getConstructor().newInstance();
@@ -475,9 +489,6 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
         return true;
     }
 
-    /*
-    * 蓝牙连接
-    * */
     @Override
     public void onServiceConnected(ComponentName name, IBinder service) {
         mwBoard= ((MetaWearBleService.LocalBinder) service).getMetaWearBoard(btDevice);
@@ -542,6 +553,10 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
     private boolean checkLocationPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
                 checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            // Permission code taken from Radius Networks
+            // http://developer.radiusnetworks.com/2015/09/29/is-your-beacon-app-ready-for-android-6.html
+
+            // Android M Permission check
             final AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle(R.string.title_request_permission);
             builder.setMessage(R.string.permission_read_external_storage);
@@ -570,5 +585,4 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
             }
         }
     }
-
 }

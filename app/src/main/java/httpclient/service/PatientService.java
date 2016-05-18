@@ -6,10 +6,10 @@ import httpclient.http.HttpRequest;
 import java.util.HashMap;
 import java.util.Map;
 
+
 /**
  * Created by nilif on 2016/5/3.
  */
-
 public class PatientService {
     /**
      * 用户登录
@@ -20,13 +20,13 @@ public class PatientService {
      *            请求参数，需要mobile和password。
      * @return 返回一个Map，其中message代表请求情况，success表示成功，其他情况见函数体
      */
-    public static Map<Object, Object> Login(String url,
+    public static Map<String, String> Login(String url,
                                             HashMap<String, String> param) {
-        String message;
-        Map<Object, Object> data = new HashMap<Object, Object>();
+        String message ;// 服务器返回的JSON
+        Map<String, String> data = new HashMap<String, String>();
         try {
             message = new HttpRequest().doPost(url, param);// 服务器返回的JSON
-            Map<Object, Object> jsonMap = JsonUtil.JsontoMap(message);// JSON转Map
+            Map<String, String> jsonMap = JsonUtil.JsontoMap(message);// JSON转Map
             // message代表请求情况
             if ("MobileOrPasswrodIEmpty".equals(jsonMap.get("message"))) {
                 data.put("message", "用户名或密码为空");
@@ -58,10 +58,10 @@ public class PatientService {
      *            ),sensorData3(double),sensorData4(double),time(long)。
      * @return 返回一个Map，其中message代表请求情况，success表示成功，其他情况见函数体
      */
-    public static Map<Object, Object> AddData(String url, String params) {
+    public static Map<String, String> AddData(String url, String params) {
         String message = new HttpRequest().doPostJason(url, params);// 服务器返回的JSON
-        Map<Object, Object> jsonMap = JsonUtil.JsontoMap(message);// JSON转Map
-        Map<Object, Object> data = new HashMap<Object, Object>();
+        Map<String, String> jsonMap = JsonUtil.JsontoMap(message);// JSON转Map
+        Map<String, String> data = new HashMap<String, String>();
         if ("DataIsEmpty".equals(jsonMap.get("message"))) {
             data.put("message", "传感器数据为空");
         } else if ("MobileIsEmpty".equals(jsonMap.get("message"))) {
@@ -88,10 +88,10 @@ public class PatientService {
      *            至少需要mobile和password，其他参数见截图
      * @return 返回一个Map，其中message代表请求情况，success表示成功，其他情况见函数体
      */
-    public static Map<Object, Object> Register(String url, String params) {
+    public static Map<String, String> Register(String url, String params) {
         String message = new HttpRequest().doPostJason(url, params);
-        Map<Object, Object> jsonMap = JsonUtil.JsontoMap(message);
-        Map<Object, Object> data = new HashMap<Object, Object>();
+        Map<String, String> jsonMap = JsonUtil.JsontoMap(message);
+        Map<String, String> data = new HashMap<String, String>();
         if ("MobileIsEmpty".equals(jsonMap.get("message"))) {
             data.put("message", "电话号码为空");
         } else if ("PasswordIsEmpty".equals(jsonMap.get("message"))) {
@@ -116,12 +116,12 @@ public class PatientService {
      *            mobile
      * @return 返回一个Map，其中message代表请求情况，success表示成功，其他情况见函数体
      */
-    public static Map<Object, Object> getPatientInfoByMobile(String url,
+    public static Map<String, String> getPatientInfoByMobile(String url,
                                                              String param) {
-        Map<Object, Object> data = new HashMap<Object, Object>();
+        Map<String, String> data = new HashMap<String, String>();
         try {
             String message = new HttpRequest().doGet(url, param);
-            Map<Object, Object> jsonMap = JsonUtil.JsontoMap(message);
+            Map<String, String> jsonMap = JsonUtil.JsontoMap(message);
             if ("PatientMobileDoesNotExists".equals(jsonMap.get("message"))) {
                 data.put("message", "用户不存在");
             } else if ("InvalidMobile".equals(jsonMap.get("message"))) {
@@ -147,11 +147,11 @@ public class PatientService {
      *           至少需要patientId，其他参数见截图
      * @return 返回一个Map，其中message代表请求情况，success表示成功，其他情况见函数体
      */
-    public static Map<Object, Object> updatePatientInfo(String url,
+    public static Map<String, String> updatePatientInfo(String url,
                                                         String params) {
         String message = new HttpRequest().doPostJason(url, params);
-        Map<Object, Object> jsonMap = JsonUtil.JsontoMap(message);
-        Map<Object, Object> data = new HashMap<Object, Object>();
+        Map<String, String> jsonMap = JsonUtil.JsontoMap(message);
+        Map<String, String> data = new HashMap<String, String>();
         if ("PatientIsEmpty".equals(jsonMap.get("message"))) {
             data.put("message", "用户为空");
         } else if ("MobileIsEmpty".equals(jsonMap.get("message"))) {

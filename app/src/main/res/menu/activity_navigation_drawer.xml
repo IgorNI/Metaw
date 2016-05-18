@@ -25,7 +25,10 @@
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:checkableBehavior="single">
-        <item android:id="@+id/nav_home" android:title="@string/navigation_fragment_home" android:checked="true" />
-        <item android:id="@+id/nav_accelerometer" android:title="@string/navigation_fragment_accelerometer" />
+        <item android:id="@+id/nav_home" android:icon="@mipmap/home" android:title="@string/navigation_fragment_home" android:checked="true" />
+        <item android:id="@+id/nav_accelerometer" android:icon="@mipmap/statistics" android:title="@string/navigation_fragment_accelerometer" />
+        <item android:id="@+id/nav_gpio" android:icon="@mipmap/pressure" android:title="@string/navigation_fragment_gpio" />
+        <item android:id="@+id/nav_me" android:icon="@mipmap/me" android:title="@string/myinformtion"/>
+        <item android:id="@+id/nav_setting" android:icon="@mipmap/settings" android:title="@string/setting"/>
     </group>
 </menu>

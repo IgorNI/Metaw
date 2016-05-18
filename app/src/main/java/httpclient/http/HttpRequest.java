@@ -15,6 +15,7 @@ import java.util.Map;
 /**
  * Created by nilif on 2016/5/3.
  */
+
 public class HttpRequest {
 
     private String charset = "utf-8";// utf-8编码
@@ -88,7 +89,7 @@ public class HttpRequest {
      *            请求参数，请求参数应该是 name1=value1&name2=value2 的形式。
      * @return 所代表远程资源的响应结果
      */
-    public String doPost(String url, Map<String,String> parameterMap) throws Exception {
+    public String doPost(String url, Map<String,String>parameterMap) throws Exception {
 
         /* Translate parameter map to parameter date string */
         StringBuffer parameterBuffer = new StringBuffer();
