@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.FileProvider;
 import android.util.Log;
@@ -62,6 +63,21 @@ public abstract class ThreeAxisChartFragment extends ModuleFragmentBase {
     SqliteHelper sqliteHelper = null;
     SQLiteDatabase db = null;
 
+    private static int i = 0;
+    private final int THRESHOLD=15;
+    private final int MIN_DISTANCE=7;
+    private final int MAX_DISTANCE=40;
+    private String step ;
+    private int mStep = 0;
+    private final int FILTER_NUM = 8;
+    private final int NUMBER = 35;
+    private int peak = 0;
+    private ArrayList<Float> acceleData = new ArrayList<Float>();
+    private float bigger = 0;
+    public static final String TAG = "Sensor";
+    private ArrayList<Float> dataOfAccelere = new ArrayList<Float>();
+    // private ArrayList<Float> saveDataOfAccelere = new ArrayList<Float>();
+    LinkedList<Float> stepDataArray = new LinkedList<Float>();
 
     protected final AsyncOperation.CompletionHandler<RouteManager> dataStreamManager = new AsyncOperation.CompletionHandler<RouteManager>() {
         @Override
@@ -76,25 +92,20 @@ public abstract class ThreeAxisChartFragment extends ModuleFragmentBase {
                     acceler = (float) Math.sqrt(spin.x() * spin.x() + spin.y() * spin.y() + spin.z() * spin.z());
                     data.addXValue(String.format("%.2f", sampleCount * samplePeriod));
                    // data.addEntry(new Entry(acceler, sampleCount), 0);
-                    // 输出到文件
-                    motionGesture(acceler);
-                    //data.addEntry(new Entry(acceler, sampleCount), 0);
-                    data.addEntry(new Entry(spin.x(), sampleCount), 0);
+                    //motionGesture(acceler);
+                    bigger = acceler * 10;
+                    //filter(bigger);
+                    data.addEntry(new Entry(acceler, sampleCount), 0);
+                    /*data.addEntry(new Entry(spin.x(), sampleCount), 0);
                     data.addEntry(new Entry(spin.y(), sampleCount), 1);
-                    data.addEntry(new Entry(spin.z(), sampleCount), 2);
+                    data.addEntry(new Entry(spin.z(), sampleCount), 2);*/
 
-                    /**
-                     * if (MOVING == 0){
-                     *    motionGesture(acceler);
-                     * }
-                     */
-
-//                    Log.d("sensor:","accelerate: "+acceler);
                     sampleCount++;
 
                 }
             });
-
+            //isStanding = STOPPING;
+            step = mStep*2+"";
         }
     };
 
@@ -112,6 +123,7 @@ public abstract class ThreeAxisChartFragment extends ModuleFragmentBase {
     private static int STOPPING = 0;
     private static final int STANDING = 1;
     private static final int SITTING = 2;
+    private static final int WALKING = 3;
     private static int maxIndex = 0;
     private static int minIndex = 0;
     private Handler chartHandler = new Handler();
@@ -135,42 +147,43 @@ public abstract class ThreeAxisChartFragment extends ModuleFragmentBase {
         if (dataArray.size() == MOTION_NUM) {
             float a = Math.abs(getMax(dataArray) - normal_acceler); // 值为正
             float b = Math.abs(normal_acceler - getMin(dataArray)); // 值为负
-            /*if (a > 0.9f) {
-                MOVING = 1;
-            }*/
-
-            int maxIndex = dataArray.indexOf(getMax(dataArray));
-            int minIndex = dataArray.indexOf(getMin(dataArray));
-            if (a < static_threshold && b < static_threshold) {
-                STOPPING = 1;
-                Log.d("now", "is" + STOPPING);
-            }
-            // 如果超过了阈值
-            if (a > sit_to_stand_maxthreshold && b > sit_to_stand_minthreshold) {
-                if (SIT_OR_STAND == 0) {
-                    Log.d("now", "the gesture is 坐 - 站");
-                    SIT_OR_STAND = 1;
-                } else {
-                    Log.d("now", "the gesture is 站 - 坐");
-                    SIT_OR_STAND = 0;
+            if (a < 1.2f) {
+                MOVING = 0;
+                int maxIndex = dataArray.indexOf(getMax(dataArray));
+                int minIndex = dataArray.indexOf(getMin(dataArray));
+                if (a < static_threshold && b < static_threshold) {
+                    STOPPING = 1;
+                    Log.d("now", "is" + STOPPING);
                 }
-            } else {
-                Log.d("now", "the gesture is ....");
+                // 如果超过了阈值
+                if (a > sit_to_stand_maxthreshold && b > sit_to_stand_minthreshold) {
+                    if (SIT_OR_STAND == 0) {
+                        Log.d("now", "the gesture is 坐 - 站");
+                        SIT_OR_STAND = 1;
+                    } else {
+                        Log.d("now", "the gesture is 站 - 坐");
+                        SIT_OR_STAND = 0;
+                    }
+                } else {
+                    Log.d("now", "the gesture is ....");
 //                Log.w("STOPPING","is"+STOPPING);
+                }
+                dataArray.clear();
+
+            }if (a > 1.2f){MOVING = 1;
+                STATE = WALKING;}
+            if (STOPPING == 1 && SIT_OR_STAND == 1) {
+                STATE = STANDING;
+                Log.d("now", "the gesture is 站立" + STATE);
+                // TODO: 2016/5/13 更新状态
             }
-            dataArray.clear();
+            if (STOPPING == 1 && SIT_OR_STAND == 0) {
+                STATE = SITTING;
+                Log.d("now", "the gesture is 坐" + STATE);
+                //// TODO: 2016/5/13 更新状态
+            }
         }
 
-        if (STOPPING == 1 && SIT_OR_STAND == 1) {
-            STATE = STANDING;
-            Log.d("now", "the gesture is 站立" + STATE);
-            // TODO: 2016/5/13 更新状态
-        }
-        if (STOPPING == 1 && SIT_OR_STAND == 0) {
-            STATE = SITTING;
-            Log.d("now", "the gesture is 坐" + STATE);
-            //// TODO: 2016/5/13 更新状态
-        }
 
     }
 
@@ -197,6 +210,96 @@ public abstract class ThreeAxisChartFragment extends ModuleFragmentBase {
         return min;
     }
 
+    private void sumPeakAndValley(ArrayList<Float> data){
+
+        ArrayList<Float>buffer=new ArrayList<Float>();
+        ArrayList<Integer>peakposition=new ArrayList<Integer>();
+        ArrayList<Integer>valleryposition=new ArrayList<Integer>();
+        float threshold=0;
+        int flag=0;
+        int distance=0;
+        for(int i=0;i<NUMBER-1;i++){
+            buffer.add(data.get(i+1)-data.get(i));
+        }
+        for(int i=0;i<buffer.size()-1;i++){
+            if(buffer.get(i)>0 && buffer.get(i+1)<0){
+                peakposition.add(i+1); // 波峰
+            }
+            if(buffer.get(i)<0 && buffer.get(i+1)>0){
+                valleryposition.add(i+1); // 波谷
+            }
+
+/*Log.w(TAG,"peakNum: "+peakposition.size());
+            Log.w(TAG,"valleryNum: "+valleryposition.size());*/
+
+        }
+
+        if((peakposition.size()>valleryposition.size() ||
+                peakposition.size()<valleryposition.size())&& peakposition.size()!=0 && valleryposition.size()!=0){
+            while(flag<peakposition.size() && flag<valleryposition.size()){
+                distance=Math.abs(peakposition.get(flag)-valleryposition.get(flag));
+                threshold=data.get(peakposition.get(flag))-data.get(valleryposition.get(flag));
+                if (threshold>0 && threshold<1) {
+                    System.out.println("静止");
+
+                }
+                if( threshold>THRESHOLD ){
+                    peak++;
+
+                }
+                flag++;
+            }
+            threshold=data.get(peakposition.get(peakposition.size()-1))-data.get(
+                    valleryposition.get(valleryposition.size()-1));
+            distance=Math.abs(peakposition.get(peakposition.size()-1)-valleryposition.get(valleryposition.size()-1));
+            if (threshold>0 && threshold<1) {
+                System.out.println("静止");
+
+            }
+            if( threshold>THRESHOLD){
+                peak++;
+
+            }
+        }
+        if(peakposition.size()==valleryposition.size())
+        {
+            while(flag<peakposition.size() && flag<valleryposition.size()){
+                distance=Math.abs(peakposition.get(flag)-valleryposition.get(flag));
+                threshold=data.get(peakposition.get(flag))-data.get(valleryposition.get(flag));
+                if (threshold>0 && threshold<1) {
+                    System.out.println("静止");
+
+                }
+                if( threshold>THRESHOLD ){
+
+                    peak++;
+                }
+                flag++;
+            }
+        }
+        mStep = peak;
+    }
+
+    private void filter(float data) {
+        float sum = 0;
+        float averger = 0;
+        stepDataArray.addLast(data);
+        if (stepDataArray.size() == FILTER_NUM){
+            for (int i=0;i<FILTER_NUM;i++) {
+                sum+=stepDataArray.get(i);
+            }
+            averger = sum/FILTER_NUM;
+            dataOfAccelere.add(averger);
+            if (dataOfAccelere.size() == NUMBER){
+                sumPeakAndValley(dataOfAccelere);
+                mStep += peak;
+                dataOfAccelere.clear();
+                // peak = 0;
+            }
+            Log.e(TAG,"pingjung"+averger);
+            stepDataArray.removeFirst();
+        }
+    }
     protected ThreeAxisChartFragment(String dataType, int layoutId, int sensorResId, String streamKey, float min, float max) {
         this.dataType = dataType;
         this.layoutId = layoutId;
@@ -248,13 +351,13 @@ public abstract class ThreeAxisChartFragment extends ModuleFragmentBase {
         spinAxisData.get(0).setColor(Color.RED);
         spinAxisData.get(0).setDrawCircles(false);
 
-        spinAxisData.add(new LineDataSet(yAxisData, "y-" + dataType));
+        /*spinAxisData.add(new LineDataSet(yAxisData, "y-" + dataType));
         spinAxisData.get(1).setColor(Color.GREEN);
         spinAxisData.get(1).setDrawCircles(false);
 
         spinAxisData.add(new LineDataSet(zAxisData, "z-" + dataType));
         spinAxisData.get(2).setColor(Color.BLUE);
-        spinAxisData.get(2).setDrawCircles(false);
+        spinAxisData.get(2).setDrawCircles(false);*/
 
         LineData data = new LineData(chartXValues);
         for (LineDataSet set : spinAxisData) {
@@ -333,12 +436,20 @@ public abstract class ThreeAxisChartFragment extends ModuleFragmentBase {
                     chart.setVisibleXRangeMaximum(sampleCount);
                     clean();
                     PersonDao personDao = new PersonDao(getActivity());
-                    personDao.addStep(1);
-                    /*System.out.println("stepNumber: "+);
+//                    personDao.creatTable();
+
+                    personDao.addInfor(0f,0f,0f,0f,1,1,"Sss");
+                    personDao.addInfor(0f,0f,0f,0f,1,2,"222");
+                    personDao.getInfor();
+//                    personDao.addInfor(0,0,0,0,1,0,"ss");
+                    //personDao.addStep(1);
+                    //personDao.addInfor(0f,0f,0f,0f,1,0, "222");
+//                    personDao.deleteTable();
+                    System.out.println("stepNumber: "+mStep*2);
                     TextView textView = (TextView) view.findViewById(R.id.ShowStepNum);
-                    textView.setText(String.valueOf(stepNum));
+                    textView.setText(String.valueOf(mStep*2));
                     TextView textView1 = (TextView) view.findViewById(R.id.showState);
-                    textView1.setText(String.valueOf(state));*/
+                    textView1.setText(String.valueOf(STATE));
 
                     if (streamRouteManager != null) {
                         streamRouteManager.remove();

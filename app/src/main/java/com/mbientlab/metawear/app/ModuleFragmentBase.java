@@ -37,7 +37,7 @@ public abstract class ModuleFragmentBase extends Fragment implements ServiceConn
     }
 
     private boolean boardReady= false;
-    protected MetaWearBoard mwBoard;
+    public MetaWearBoard mwBoard;
     protected FragmentBus fragBus;
     protected int sensorResId;
 

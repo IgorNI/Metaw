@@ -348,8 +348,8 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
         getApplicationContext().bindService(new Intent(this, MetaWearBleService.class), this, BIND_AUTO_CREATE);
         /*httpPsotIntent = new Intent(this,MyIntentService.class);
         startService(httpPsotIntent);*/
-        countStepIntent = new Intent(this,CountStepService.class);
-        startService(countStepIntent);
+        /*countStepIntent = new Intent(this,CountStepService.class);
+        startService(countStepIntent);*/
 
 
     }

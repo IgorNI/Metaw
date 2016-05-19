@@ -59,7 +59,10 @@
         <service
             android:name=".CountStepService"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true" />
+        <service
+            android:name=".MyIntentService2"
+            android:exported="false"></service>
     </application>
 
 </manifest>
