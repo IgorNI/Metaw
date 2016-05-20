@@ -71,9 +71,10 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
     private static final String EXTRA_URI = "uri";
     private final static String FRAGMENT_KEY= "com.mbientlab.metawear.app.NavigationActivity.FRAGMENT_KEY";
     private final static Map<Integer, Class<? extends ModuleFragmentBase>> FRAGMENT_CLASSES;
-    private static Intent httpPsotIntent;
+
     private static Intent countStepIntent;
     private static Intent pressureIntent;
+    private static Intent postDataIntent;
 
 
     static {
@@ -346,8 +347,8 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
 
         btDevice= getIntent().getParcelableExtra(EXTRA_BT_DEVICE);
         getApplicationContext().bindService(new Intent(this, MetaWearBleService.class), this, BIND_AUTO_CREATE);
-        /*httpPsotIntent = new Intent(this,MyIntentService.class);
-        startService(httpPsotIntent);*/
+        postDataIntent = new Intent(this,MyIntentService.class);
+        startService(postDataIntent);
         /*countStepIntent = new Intent(this,CountStepService.class);
         startService(countStepIntent);*/
 

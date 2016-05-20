@@ -1,5 +1,8 @@
 package com.mbientlab.metawear.app;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * Created by nilif on 2016/5/20.
  */
@@ -48,4 +51,10 @@ public class Person {
     public String getTime() {
         return time;
     }
+    public String time(){
+        SimpleDateFormat formater = new SimpleDateFormat("yyyy年MM月dd日    HH:mm:ss ");
+        Date curDate = new Date(System.currentTimeMillis());
+        return formater.format(curDate);
+    }
+
 }

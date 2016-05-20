@@ -27,6 +27,8 @@ public class SettingFragment extends ModuleFragmentBase implements View.OnClickL
     public static long time = 0l;
     private static long time1 = 0l;
     private Handler handler;
+    private static Intent httpPsotIntent;
+
 
     @Nullable
     @Override
@@ -35,6 +37,17 @@ public class SettingFragment extends ModuleFragmentBase implements View.OnClickL
         Button postTime1 = (Button) v.findViewById(R.id.post_time_1s);
         Button postTime2 = (Button) v.findViewById(R.id.post_time_10s);
         Button postTime3 = (Button) v.findViewById(R.id.post_time_60s);
+        Button postData = (Button) v.findViewById(R.id.post_data_btn);
+        httpPsotIntent = new Intent(getActivity(),MyIntentService.class);
+        postData.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                //ResultReceiver rr = new InnerResultReceiver(handler);
+                Log.d(TAG, "onClick: ");
+                //getActivity().startService(httpPsotIntent);
+            }
+        });
         postTime1.setOnClickListener(this);
         postTime2.setOnClickListener(this);
         postTime3.setOnClickListener(this);
@@ -47,25 +60,27 @@ public class SettingFragment extends ModuleFragmentBase implements View.OnClickL
         switch (v.getId()){
             case R.id.post_time_1s:
                 Log.w(TAG, "onClick: 1");
+                getActivity().stopService(httpPsotIntent);
                 time1 = 1000l;
                 Toast.makeText(getActivity().getApplicationContext(),"上传间隔已设置为1s",Toast.LENGTH_SHORT).show();
                 break;
             case R.id.post_time_10s:
                 Log.w(TAG, "onClick: 2");
+                getActivity().stopService(httpPsotIntent);
                 time1 = 10000l;
                 Toast.makeText(getActivity().getApplicationContext(),"上传间隔已设置为10s",Toast.LENGTH_SHORT).show();
                 break;
             case R.id.post_time_60s:
                 time1 = 60000l;
                 Log.w(TAG, "onClick: 3");
+                getActivity().stopService(httpPsotIntent);
                 Toast.makeText(getActivity().getApplicationContext(),"上传间隔已设置为60s",Toast.LENGTH_SHORT).show();
                 break;
         }
             time = time1;
-            Intent intent = new Intent(getActivity(),MyIntentService.class);
-            //ResultReceiver rr = new InnerResultReceiver(handler);
-            intent.putExtra("receiver", time);
-            getActivity().startService(intent);
+            httpPsotIntent.putExtra("receiver", time);
+            getActivity().startService(httpPsotIntent);
+
     }
 
 

@@ -64,7 +64,7 @@ public abstract class ThreeAxisChartFragment extends ModuleFragmentBase {
     SQLiteDatabase db = null;
 
     private static int i = 0;
-    private final int THRESHOLD=15;
+    private final int THRESHOLD=10;
     private final int MIN_DISTANCE=7;
     private final int MAX_DISTANCE=40;
     private String step ;
@@ -92,10 +92,11 @@ public abstract class ThreeAxisChartFragment extends ModuleFragmentBase {
                     acceler = (float) Math.sqrt(spin.x() * spin.x() + spin.y() * spin.y() + spin.z() * spin.z());
                     data.addXValue(String.format("%.2f", sampleCount * samplePeriod));
                    // data.addEntry(new Entry(acceler, sampleCount), 0);
-                    //motionGesture(acceler);
-                    bigger = acceler * 10;
-                    //filter(bigger);
                     data.addEntry(new Entry(acceler, sampleCount), 0);
+                    motionGesture(acceler);
+                    bigger = acceler * 10;
+                    filter(bigger);
+
                     /*data.addEntry(new Entry(spin.x(), sampleCount), 0);
                     data.addEntry(new Entry(spin.y(), sampleCount), 1);
                     data.addEntry(new Entry(spin.z(), sampleCount), 2);*/
@@ -117,10 +118,10 @@ public abstract class ThreeAxisChartFragment extends ModuleFragmentBase {
     private static float sit_to_stand_minthreshold = 0.10f;
     private static float stand_to_sit_maxthreshold = 0.19f;
     private static float stand_to_sit_minthreshold = 0.12f;
-    private static int SIT_OR_STAND = 0;
+    private static int SIT_OR_STAND = 0; // 站
     private static int STATE = 0;
     private static int MOVING = 0;
-    private static int STOPPING = 0;
+    private static int STOPPING = 1;
     private static final int STANDING = 1;
     private static final int SITTING = 2;
     private static final int WALKING = 3;
@@ -145,43 +146,39 @@ public abstract class ThreeAxisChartFragment extends ModuleFragmentBase {
         dataArray.add(acceler);
         // 一个站-坐或者坐-站的动作大约为0.64s，能采集32个值。
         if (dataArray.size() == MOTION_NUM) {
+
             float a = Math.abs(getMax(dataArray) - normal_acceler); // 值为正
             float b = Math.abs(normal_acceler - getMin(dataArray)); // 值为负
-            if (a < 1.2f) {
-                MOVING = 0;
                 int maxIndex = dataArray.indexOf(getMax(dataArray));
                 int minIndex = dataArray.indexOf(getMin(dataArray));
                 if (a < static_threshold && b < static_threshold) {
                     STOPPING = 1;
-                    Log.d("now", "is" + STOPPING);
+                    Log.w("now", "is" + STOPPING);
                 }
                 // 如果超过了阈值
                 if (a > sit_to_stand_maxthreshold && b > sit_to_stand_minthreshold) {
-                    if (SIT_OR_STAND == 0) {
-                        Log.d("now", "the gesture is 坐 - 站");
-                        SIT_OR_STAND = 1;
+                    if (SIT_OR_STAND == 1) {
+                        Log.w("now", "the gesture is 坐 - 站");
+                        SIT_OR_STAND = 0;   // 站着为0
                     } else {
-                        Log.d("now", "the gesture is 站 - 坐");
-                        SIT_OR_STAND = 0;
+                        Log.w("now", "the gesture is 站 - 坐");
+                        SIT_OR_STAND = 1;  // 坐着为1
                     }
                 } else {
-                    Log.d("now", "the gesture is ....");
+                    Log.w("now", "the gesture is ....");
 //                Log.w("STOPPING","is"+STOPPING);
                 }
                 dataArray.clear();
-
-            }if (a > 1.2f){MOVING = 1;
-                STATE = WALKING;}
-            if (STOPPING == 1 && SIT_OR_STAND == 1) {
-                STATE = STANDING;
-                Log.d("now", "the gesture is 站立" + STATE);
-                // TODO: 2016/5/13 更新状态
-            }
-            if (STOPPING == 1 && SIT_OR_STAND == 0) {
-                STATE = SITTING;
-                Log.d("now", "the gesture is 坐" + STATE);
-                //// TODO: 2016/5/13 更新状态
-            }
+        }
+        if (STOPPING == 1 && SIT_OR_STAND == 0) {
+            STATE = STANDING;
+            Log.w("now", "the gesture is 站立" + STATE);
+            // TODO: 2016/5/13 更新状态
+        }
+        if (STOPPING == 1 && SIT_OR_STAND == 1) {
+            STATE = SITTING;
+            Log.w("now", "the gesture is 坐" + STATE);
+            //// TODO: 2016/5/13 更新状态
         }
 
 
@@ -241,11 +238,12 @@ public abstract class ThreeAxisChartFragment extends ModuleFragmentBase {
                 threshold=data.get(peakposition.get(flag))-data.get(valleryposition.get(flag));
                 if (threshold>0 && threshold<1) {
                     System.out.println("静止");
-
+                    STOPPING = 1;
                 }
                 if( threshold>THRESHOLD ){
                     peak++;
-
+                    STOPPING = 0;
+                    STATE = WALKING;
                 }
                 flag++;
             }
@@ -254,11 +252,12 @@ public abstract class ThreeAxisChartFragment extends ModuleFragmentBase {
             distance=Math.abs(peakposition.get(peakposition.size()-1)-valleryposition.get(valleryposition.size()-1));
             if (threshold>0 && threshold<1) {
                 System.out.println("静止");
-
+                STOPPING = 1;
             }
             if( threshold>THRESHOLD){
                 peak++;
-
+                STOPPING = 0;
+                STATE = WALKING;
             }
         }
         if(peakposition.size()==valleryposition.size())
@@ -268,10 +267,11 @@ public abstract class ThreeAxisChartFragment extends ModuleFragmentBase {
                 threshold=data.get(peakposition.get(flag))-data.get(valleryposition.get(flag));
                 if (threshold>0 && threshold<1) {
                     System.out.println("静止");
-
+                    STOPPING = 1;
                 }
                 if( threshold>THRESHOLD ){
-
+                    STOPPING = 0;
+                    STATE = WALKING;
                     peak++;
                 }
                 flag++;
@@ -294,6 +294,7 @@ public abstract class ThreeAxisChartFragment extends ModuleFragmentBase {
                 sumPeakAndValley(dataOfAccelere);
                 mStep += peak;
                 dataOfAccelere.clear();
+
                 // peak = 0;
             }
             Log.e(TAG,"pingjung"+averger);
@@ -401,6 +402,8 @@ public abstract class ThreeAxisChartFragment extends ModuleFragmentBase {
 
     public void onViewCreated(final View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        final SimpleDateFormat formater = new SimpleDateFormat("yyyy年MM月dd日    HH:mm:ss ");
+        final Date curDate = new Date(System.currentTimeMillis());
 
         chart = (LineChart) view.findViewById(R.id.data_chart);
 
@@ -436,15 +439,16 @@ public abstract class ThreeAxisChartFragment extends ModuleFragmentBase {
                     chart.setVisibleXRangeMaximum(sampleCount);
                     clean();
                     PersonDao personDao = new PersonDao(getActivity());
+                    Person person = null;
 //                    personDao.creatTable();
 
-                    personDao.addInfor(0f,0f,0f,0f,1,1,"Sss");
-                    personDao.addInfor(0f,0f,0f,0f,1,2,"222");
-                    personDao.getInfor();
+                    personDao.addInfor(0f,0f,0f,0f,mStep*2,STATE,formater.format(curDate));
+//                    personDao.addInfor(1f,1f,1f,1f,2,2,"222");
+                    //personDao.getInfor();
 //                    personDao.addInfor(0,0,0,0,1,0,"ss");
                     //personDao.addStep(1);
                     //personDao.addInfor(0f,0f,0f,0f,1,0, "222");
-//                    personDao.deleteTable();
+                   // personDao.deleteTable();
                     System.out.println("stepNumber: "+mStep*2);
                     TextView textView = (TextView) view.findViewById(R.id.ShowStepNum);
                     textView.setText(String.valueOf(mStep*2));
