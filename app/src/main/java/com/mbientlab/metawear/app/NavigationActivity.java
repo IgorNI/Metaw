@@ -131,6 +131,7 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             currentMwBoard= ((MetaWearBleService.LocalBinder) service).getMetaWearBoard(btDevice);
+
         }
 
         @Override

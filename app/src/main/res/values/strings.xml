@@ -302,7 +302,7 @@
   <string name="select_chart">Select Chart</string>
   <string name="myinformtion">我</string>
   <string name="setting">设置</string>
-  <string name="set_post_time">设置上传时间</string>
+  <string name="set_post_time">设置间隔</string>
   <string name="post_time_1s">1秒</string>
   <string name="post_time_10s">10秒</string>
   <string name="post_time_60s">60秒</string>

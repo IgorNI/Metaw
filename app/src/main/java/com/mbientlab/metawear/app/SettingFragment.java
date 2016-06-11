@@ -35,22 +35,22 @@ public class SettingFragment extends ModuleFragmentBase implements View.OnClickL
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_settting, container, false);
         Button postTime1 = (Button) v.findViewById(R.id.post_time_1s);
-        Button postTime2 = (Button) v.findViewById(R.id.post_time_10s);
-        Button postTime3 = (Button) v.findViewById(R.id.post_time_60s);
-        Button postData = (Button) v.findViewById(R.id.post_data_btn);
-        httpPsotIntent = new Intent(getActivity(),MyIntentService.class);
-        postData.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                //ResultReceiver rr = new InnerResultReceiver(handler);
-                Log.d(TAG, "onClick: ");
-                //getActivity().startService(httpPsotIntent);
-            }
-        });
+       /* Button postTime2 = (Button) v.findViewById(R.id.post_time_10s);
+        Button postTime3 = (Button) v.findViewById(R.id.post_time_60s);*/
+//        Button postData = (Button) v.findViewById(R.id.post_data_btn);
+//        httpPsotIntent = new Intent(getActivity(),MyIntentService.class);
+//        postData.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                //ResultReceiver rr = new InnerResultReceiver(handler);
+//                Log.d(TAG, "onClick: ");
+//                //getActivity().startService(httpPsotIntent);
+//            }
+//        });
         postTime1.setOnClickListener(this);
-        postTime2.setOnClickListener(this);
-        postTime3.setOnClickListener(this);
+       /* postTime2.setOnClickListener(this);
+        postTime3.setOnClickListener(this);*/
         handler = new Handler();
         return v;
 
@@ -60,9 +60,9 @@ public class SettingFragment extends ModuleFragmentBase implements View.OnClickL
         switch (v.getId()){
             case R.id.post_time_1s:
                 Log.w(TAG, "onClick: 1");
-                getActivity().stopService(httpPsotIntent);
+                //getActivity().stopService(httpPsotIntent);
                 time1 = 1000l;
-                Toast.makeText(getActivity().getApplicationContext(),"上传间隔已设置为1s",Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity().getApplicationContext(),"您现在腿部压力较高，请您减少运动，保证休息",Toast.LENGTH_SHORT).show();
                 break;
             case R.id.post_time_10s:
                 Log.w(TAG, "onClick: 2");

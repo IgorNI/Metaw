@@ -10,6 +10,7 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.mbientlab.metawear.AsyncOperation;
 import com.mbientlab.metawear.Message;
+import com.mbientlab.metawear.MetaWearBleService;
 import com.mbientlab.metawear.MetaWearBoard;
 import com.mbientlab.metawear.RouteManager;
 import com.mbientlab.metawear.UnsupportedModuleException;
@@ -37,13 +38,13 @@ public class CountStepService extends Service {
     protected int sampleCount;
     private int layoutId;
     ModuleFragmentBase moduleFragmentBase;
-    private Accelerometer accelModule ;
 
     static final float INITIAL_RANGE = 2.f, ACC_FREQ = 50.f;
     private static final float[] MMA845Q_RANGES = {2.f, 4.f, 8.f}, BMI160_RANGES = {2.f, 4.f, 8.f, 16.f};
     private int rangeIndex = 0;
     private static final String STREAM_KEY = "accel_stream";
 
+    public MetaWearBoard mwBoard;
     public CountStepService() {
     }
 
@@ -62,11 +63,6 @@ public class CountStepService extends Service {
 
     @Override
     public void onStart(Intent intent, int startId) {
-        try {
-            accelModule= moduleFragmentBase.mwBoard.getModule(Accelerometer.class);
-        } catch (UnsupportedModuleException e) {
-            e.printStackTrace();
-        }
         Log.w(TAG, "onStart: ");
         super.onStart(intent, startId);
     }
@@ -76,23 +72,30 @@ public class CountStepService extends Service {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                samplePeriod= 1 / accelModule.setOutputDataRate(ACC_FREQ);
+                final Accelerometer accelModule;
+                try {
+                    accelModule = mwBoard.getModule(Accelerometer.class);
+                    samplePeriod= 1 / accelModule.setOutputDataRate(ACC_FREQ);
 
-                if (accelModule instanceof Bmi160Accelerometer || accelModule instanceof Bma255Accelerometer) {
-                    accelModule.setAxisSamplingRange(BMI160_RANGES[rangeIndex]);
-                } else if (accelModule instanceof Mma8452qAccelerometer) {
-                    accelModule.setAxisSamplingRange(MMA845Q_RANGES[rangeIndex]);
-                }
-
-                AsyncOperation<RouteManager> routeManagerResult= accelModule.routeData().fromAxes().stream(STREAM_KEY).commit();
-                routeManagerResult.onComplete(dataStreamManager);
-                routeManagerResult.onComplete(new AsyncOperation.CompletionHandler<RouteManager>() {
-                    @Override
-                    public void success(RouteManager result) {
-                        accelModule.enableAxisSampling();
-                        accelModule.start();
+                    if (accelModule instanceof Bmi160Accelerometer || accelModule instanceof Bma255Accelerometer) {
+                        accelModule.setAxisSamplingRange(BMI160_RANGES[rangeIndex]);
+                    } else if (accelModule instanceof Mma8452qAccelerometer) {
+                        accelModule.setAxisSamplingRange(MMA845Q_RANGES[rangeIndex]);
                     }
-                });
+
+                    AsyncOperation<RouteManager> routeManagerResult= accelModule.routeData().fromAxes().stream(STREAM_KEY).commit();
+                    routeManagerResult.onComplete(dataStreamManager);
+                    routeManagerResult.onComplete(new AsyncOperation.CompletionHandler<RouteManager>() {
+                        @Override
+                        public void success(RouteManager result) {
+                            accelModule.enableAxisSampling();
+                            accelModule.start();
+                        }
+                    });
+
+                } catch (UnsupportedModuleException e) {
+                    e.printStackTrace();
+                }
 
             }
         }).start();

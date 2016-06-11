@@ -85,7 +85,7 @@ public class MyIntentService extends IntentService {
 
         Timer timer = new Timer();
 
-        time = intent.getLongExtra("receiver",1000000l);
+        time = intent.getLongExtra("receiver",10000l);
         Thread thread = new Thread(new VisitWebRunnable());
         try {
             while(true){
