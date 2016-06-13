@@ -49,9 +49,13 @@ import com.mbientlab.metawear.MetaWearBleService;
 import com.mbientlab.metawear.MetaWearBoard;
 import com.mbientlab.metawear.MetaWearBoard.ConnectionStateHandler;
 import com.mbientlab.metawear.MetaWearBoard.DfuProgressHandler;
+import com.mbientlab.metawear.RouteManager;
 import com.mbientlab.metawear.UnsupportedModuleException;
 import com.mbientlab.metawear.app.ModuleFragmentBase.FragmentBus;
+import com.mbientlab.metawear.module.Accelerometer;
 import com.mbientlab.metawear.module.Debug;
+import com.mbientlab.metawear.module.Gpio;
+import com.mbientlab.metawear.module.Timer;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -72,6 +76,15 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
     private final static String FRAGMENT_KEY= "com.mbientlab.metawear.app.NavigationActivity.FRAGMENT_KEY";
     private final static Map<Integer, Class<? extends ModuleFragmentBase>> FRAGMENT_CLASSES;
 
+    private static MetaWearBoard metaWearBoard;
+    private static Accelerometer accelModule = null;
+    private static Gpio gpioModule = null;
+    private static Timer timerModule;
+    private AsyncOperation<Timer.Controller> timerController;
+    private static AsyncOperation<RouteManager> analogRoute;
+    private static AsyncOperation<RouteManager> acceleRoute;
+    private static final byte GPIO_PIN = 0;
+
     private static Intent countStepIntent;
     private static Intent pressureIntent;
     private static Intent postDataIntent;
@@ -82,7 +95,7 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
         tempMap.put(R.id.nav_home, HomeFragment.class);
         tempMap.put(R.id.nav_accelerometer, AccelerometerFragment.class);
         tempMap.put(R.id.nav_gpio, GpioPressueFragment.class);
-        tempMap.put(R.id.nav_me,MyInformationFragment.class);
+        tempMap.put(R.id.nav_me,LoginFragment.class);
         tempMap.put(R.id.nav_setting,SettingFragment.class);
 
         FRAGMENT_CLASSES= Collections.unmodifiableMap(tempMap);
@@ -131,8 +144,24 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             currentMwBoard= ((MetaWearBleService.LocalBinder) service).getMetaWearBoard(btDevice);
-
+            /*try {
+                boardReady();
+            } catch (UnsupportedModuleException e) {
+                e.printStackTrace();
+            }*/
         }
+
+        /*protected void boardReady() throws UnsupportedModuleException{
+            accelModule = metaWearBoard.getModule(Accelerometer.class);
+            gpioModule = metaWearBoard.getModule(Gpio.class);
+            timerModule= metaWearBoard.getModule(Timer.class);
+            analogRoute= gpioModule.routeData().fromAnalogIn(GPIO_PIN, Gpio.AnalogReadMode.ADC)
+                       *//* .process("mathprocesser")*//**//* "math?operation=mult&rhs=1")*//*
+                    .stream("analog_gpio")
+                    .commit();
+            acceleRoute= accelModule.routeData().fromAxes().stream("accelSub").commit();
+
+        }*/
 
         @Override
         public void onServiceDisconnected(ComponentName name) { }
@@ -348,8 +377,8 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
 
         btDevice= getIntent().getParcelableExtra(EXTRA_BT_DEVICE);
         getApplicationContext().bindService(new Intent(this, MetaWearBleService.class), this, BIND_AUTO_CREATE);
-        postDataIntent = new Intent(this,MyIntentService.class);
-        startService(postDataIntent);
+        /*postDataIntent = new Intent(this,MyIntentService.class);
+        startService(postDataIntent);*/
         /*countStepIntent = new Intent(this,CountStepService.class);
         startService(countStepIntent);*/
 

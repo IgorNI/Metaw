@@ -57,8 +57,8 @@ import httpclient.service.PatientService;
         return true;
     }
     public void initUI(){
-        showTextView = (TextView)findViewById(R.id.textview_show);
-        visitWebBtn = (Button)findViewById(R.id.btn_visit_web);
+//        showTextView = (TextView)findViewById(R.id.textview_show);
+//        visitWebBtn = (Button)findViewById(R.id.btn_visit_web);
     }
     class VisitWebRunnable implements Runnable{
 
