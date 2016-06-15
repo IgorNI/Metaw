@@ -1,7 +1,5 @@
-/**
- * Created by nilif on 2016/5/3.
- */
 package com.mbientlab.metawear.app;
+
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -16,17 +14,17 @@ import android.widget.TextView;
 
 import com.mbientlab.metawear.AsyncOperation;
 import com.mbientlab.metawear.Message;
-import com.mbientlab.metawear.MetaWearBoard.DeviceInformation;
+import com.mbientlab.metawear.MetaWearBoard;
 import com.mbientlab.metawear.RouteManager;
 import com.mbientlab.metawear.UnsupportedModuleException;
 import com.mbientlab.metawear.app.help.HelpOptionAdapter;
 import com.mbientlab.metawear.module.Led;
 import com.mbientlab.metawear.module.Switch;
-/*
-* 显示主页
-*
-* */
-public class HomeFragment extends ModuleFragmentBase {
+
+/**
+ * Created by nilif on 2016/6/14.
+ */
+public class DeviceInformation extends ModuleFragmentBase {
     private Led ledModule;
 
     public static class MetaBootWarningFragment extends DialogFragment {
@@ -41,17 +39,17 @@ public class HomeFragment extends ModuleFragmentBase {
         }
     }
 
-    public HomeFragment() {
+    public DeviceInformation() {
         super(R.string.navigation_fragment_home);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         setRetainInstance(true);
-        return inflater.inflate(R.layout.fragment_home_layout, container, false);
+        return inflater.inflate(R.layout.fragment_deviceinfor, container, false);
     }
 
-    /*@Override
+    @Override
     public void onViewCreated(final View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
@@ -142,11 +140,11 @@ public class HomeFragment extends ModuleFragmentBase {
                 .setNegativeButton(R.string.label_no, null)
                 .setCancelable(false)
                 .setMessage(msgResId);
-    }*/
+    }
 
     @Override
     protected void boardReady() throws UnsupportedModuleException {
-        /*setupFragment(getView());*/
+        setupFragment(getView());
     }
 
     @Override
@@ -154,7 +152,7 @@ public class HomeFragment extends ModuleFragmentBase {
 
     }
 
-    /*@Override
+    @Override
     public void reconnected() {
         setupFragment(getView());
     }
@@ -184,9 +182,9 @@ public class HomeFragment extends ModuleFragmentBase {
             }
         }
 
-        mwBoard.readDeviceInformation().onComplete(new AsyncOperation.CompletionHandler<DeviceInformation>() {
+        mwBoard.readDeviceInformation().onComplete(new AsyncOperation.CompletionHandler<MetaWearBoard.DeviceInformation>() {
             @Override
-            public void success(DeviceInformation result) {
+            public void success(MetaWearBoard.DeviceInformation result) {
                 ((TextView) v.findViewById(R.id.manufacturer_value)).setText(result.manufacturer());
                 ((TextView) v.findViewById(R.id.model_number_value)).setText(result.modelNumber());
                 ((TextView) v.findViewById(R.id.serial_number_value)).setText(result.serialNumber());
@@ -221,9 +219,9 @@ public class HomeFragment extends ModuleFragmentBase {
                         }
                     });
         } catch (UnsupportedModuleException ignored) {
-        }*/
+        }
 
-        /*int[] ledResIds= new int[] {R.id.led_stop, R.id.led_red_on, R.id.led_green_on, R.id.led_blue_on};
+        int[] ledResIds= new int[] {R.id.led_stop, R.id.led_red_on, R.id.led_green_on, R.id.led_blue_on};
 
         try {
             ledModule = mwBoard.getModule(Led.class);
@@ -235,6 +233,6 @@ public class HomeFragment extends ModuleFragmentBase {
             for(int id: ledResIds) {
                 v.findViewById(id).setEnabled(false);
             }
-        }*/
+        }
     }
-
+}

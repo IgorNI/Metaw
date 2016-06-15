@@ -96,7 +96,9 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
         tempMap.put(R.id.nav_accelerometer, AccelerometerFragment.class);
         tempMap.put(R.id.nav_gpio, GpioPressueFragment.class);
         tempMap.put(R.id.nav_me,LoginFragment.class);
-        tempMap.put(R.id.nav_setting,SettingFragment.class);
+        tempMap.put(R.id.nav_advice,GetAdviceFragment.class);
+        tempMap.put(R.id.nav_setting,DeviceInformation.class);
+
 
         FRAGMENT_CLASSES= Collections.unmodifiableMap(tempMap);
     }

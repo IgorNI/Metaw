@@ -175,7 +175,7 @@ public class MyIntentService extends IntentService {
                         "\"patientMobile\":\"15733333333\"}";
 
 
-                Map<String, String> user = PatientService.AddData(HttpUrl.NLF_DATA, params);
+                Map<Object, Object> user = PatientService.AddData(HttpUrl.NLF_DATA, params);
             }
         }
     }

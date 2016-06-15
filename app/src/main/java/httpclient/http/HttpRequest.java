@@ -16,6 +16,10 @@ import java.util.Map;
  * Created by nilif on 2016/5/3.
  */
 
+
+
+
+
 public class HttpRequest {
 
     private String charset = "utf-8";// utf-8编码
@@ -239,5 +243,4 @@ public class HttpRequest {
             e.printStackTrace();
         }
         return resultBuffer.toString();
-    }
-}
+    }  }

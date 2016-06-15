@@ -91,8 +91,7 @@ import httpclient.service.PatientService;
 
 
 
-            Map<String, String> user = PatientService.AddData(HttpUrl.NLF_DATA, params);
-            resultStr =user.get("message");
+            Map<Object, Object> user = PatientService.AddData(HttpUrl.NLF_DATA, params);
         }
 
     }

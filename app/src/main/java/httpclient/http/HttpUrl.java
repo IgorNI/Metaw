@@ -17,6 +17,8 @@ public class HttpUrl {
             + "/member/patient/update";// 注册的接口
     public static final String NLF_DATA = HOST
             + "/member/nlfData/addData";
+    public static final String DOCTOR_ADVICE = HOST
+            +"/member/patient/getAdviceByPatientMobile/?mobile=15711111111"; // 获取建议的接口
 }
 
 

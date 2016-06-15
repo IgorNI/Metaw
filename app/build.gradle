@@ -41,6 +41,7 @@ android {
         targetSdkVersion 23
         versionCode 16
         versionName "3.4.5"
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -58,4 +59,9 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.2.0'
     compile 'com.android.support:design:23.2.0'
     compile 'com.google.android.gms:play-services-appindexing:8.1.0'
+    // http://mvnrepository.com/artifact/com.alibaba/fastjson
+    compile 'com.alibaba:fastjson:1.2.12'
+
+    compile files('libs/json-lib-2.4-jdk15.jar')
+
 }

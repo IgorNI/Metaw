@@ -98,11 +98,12 @@
             android:calendarViewShown="false"
             android:layout_height="339dp"
             android:id="@+id/datePicker"></DatePicker>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="确定"
+            android:id="@+id/confirm_btn"/>
     </LinearLayout>
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="确定"
-        android:id="@+id/confirm_btn"/>
 
 </LinearLayout>

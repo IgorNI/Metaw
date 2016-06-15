@@ -29,6 +29,7 @@
         <item android:id="@+id/nav_accelerometer" android:icon="@mipmap/statistics" android:title="@string/navigation_fragment_accelerometer" />
         <item android:id="@+id/nav_gpio" android:icon="@mipmap/pressure" android:title="@string/navigation_fragment_gpio" />
         <item android:id="@+id/nav_me" android:icon="@mipmap/me" android:title="@string/myinformtion"/>
-        <item android:id="@+id/nav_setting" android:icon="@mipmap/settings" android:title="@string/setting"/>
+        <item android:id="@+id/nav_advice" android:icon="@mipmap/settings" android:title="@string/getadvice"/>
+        <item android:id="@+id/nav_setting" android:icon="@mipmap/settings" android:title="@string/about"/>
     </group>
 </menu>

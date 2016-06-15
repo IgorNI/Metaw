@@ -1,7 +1,12 @@
 package httpclient.service;
 
+//import org.json.JSONArray;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+
 import httpclient.common.JsonUtil;
 import httpclient.http.HttpRequest;
+import httpclient.http.HttpTest;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,13 +25,13 @@ public class PatientService {
      *            请求参数，需要mobile和password。
      * @return 返回一个Map，其中message代表请求情况，success表示成功，其他情况见函数体
      */
-    public static Map<String, String> Login(String url,
+    public static Map<Object, Object> Login(String url,
                                             HashMap<String, String> param) {
-        String message ;// 服务器返回的JSON
-        Map<String, String> data = new HashMap<String, String>();
+        String message;
+        Map<Object, Object> data = new HashMap<Object, Object>();
         try {
             message = new HttpRequest().doPost(url, param);// 服务器返回的JSON
-            Map<String, String> jsonMap = JsonUtil.JsontoMap(message);// JSON转Map
+            Map<Object, Object> jsonMap = JsonUtil.JsontoMap(message);// JSON转Map
             // message代表请求情况
             if ("MobileOrPasswrodIEmpty".equals(jsonMap.get("message"))) {
                 data.put("message", "用户名或密码为空");
@@ -34,7 +39,7 @@ public class PatientService {
                 data.put("message", "用户不存在");
             } else if ("IncorrectPasswrod".equals(jsonMap.get("message"))) {
                 data.put("message", "密码错误");
-            } else if ("Success".equals(jsonMap.get("message"))) {
+            } else if ("success".equals(jsonMap.get("message"))) {
                 // 将服务器Json的data（可能需要的数据）部分转换为Map
                 data = JsonUtil.JsontoMap(jsonMap.get("data"));
                 data.put("message", "sucess");
@@ -58,10 +63,10 @@ public class PatientService {
      *            ),sensorData3(double),sensorData4(double),time(long)。
      * @return 返回一个Map，其中message代表请求情况，success表示成功，其他情况见函数体
      */
-    public static Map<String, String> AddData(String url, String params) {
+    public static Map<Object, Object> AddData(String url, String params) {
         String message = new HttpRequest().doPostJason(url, params);// 服务器返回的JSON
-        Map<String, String> jsonMap = JsonUtil.JsontoMap(message);// JSON转Map
-        Map<String, String> data = new HashMap<String, String>();
+        Map<Object, Object> jsonMap = JsonUtil.JsontoMap(message);// JSON转Map
+        Map<Object, Object> data = new HashMap<Object, Object>();
         if ("DataIsEmpty".equals(jsonMap.get("message"))) {
             data.put("message", "传感器数据为空");
         } else if ("MobileIsEmpty".equals(jsonMap.get("message"))) {
@@ -88,10 +93,10 @@ public class PatientService {
      *            至少需要mobile和password，其他参数见截图
      * @return 返回一个Map，其中message代表请求情况，success表示成功，其他情况见函数体
      */
-    public static Map<String, String> Register(String url, String params) {
+    public static Map<Object, Object> Register(String url, String params) {
         String message = new HttpRequest().doPostJason(url, params);
-        Map<String, String> jsonMap = JsonUtil.JsontoMap(message);
-        Map<String, String> data = new HashMap<String, String>();
+        Map<Object, Object> jsonMap = JsonUtil.JsontoMap(message);
+        Map<Object, Object> data = new HashMap<Object, Object>();
         if ("MobileIsEmpty".equals(jsonMap.get("message"))) {
             data.put("message", "电话号码为空");
         } else if ("PasswordIsEmpty".equals(jsonMap.get("message"))) {
@@ -116,12 +121,12 @@ public class PatientService {
      *            mobile
      * @return 返回一个Map，其中message代表请求情况，success表示成功，其他情况见函数体
      */
-    public static Map<String, String> getPatientInfoByMobile(String url,
+    public static Map<Object, Object> getPatientInfoByMobile(String url,
                                                              String param) {
-        Map<String, String> data = new HashMap<String, String>();
+        Map<Object, Object> data = new HashMap<Object, Object>();
         try {
             String message = new HttpRequest().doGet(url, param);
-            Map<String, String> jsonMap = JsonUtil.JsontoMap(message);
+            Map<Object, Object> jsonMap = JsonUtil.JsontoMap(message);
             if ("PatientMobileDoesNotExists".equals(jsonMap.get("message"))) {
                 data.put("message", "用户不存在");
             } else if ("InvalidMobile".equals(jsonMap.get("message"))) {
@@ -147,11 +152,11 @@ public class PatientService {
      *           至少需要patientId，其他参数见截图
      * @return 返回一个Map，其中message代表请求情况，success表示成功，其他情况见函数体
      */
-    public static Map<String, String> updatePatientInfo(String url,
+    public static Map<Object, Object> updatePatientInfo(String url,
                                                         String params) {
         String message = new HttpRequest().doPostJason(url, params);
-        Map<String, String> jsonMap = JsonUtil.JsontoMap(message);
-        Map<String, String> data = new HashMap<String, String>();
+        Map<Object, Object> jsonMap = JsonUtil.JsontoMap(message);
+        Map<Object, Object> data = new HashMap<Object, Object>();
         if ("PatientIsEmpty".equals(jsonMap.get("message"))) {
             data.put("message", "用户为空");
         } else if ("MobileIsEmpty".equals(jsonMap.get("message"))) {
@@ -171,5 +176,25 @@ public class PatientService {
         }
         System.out.println(data);
         return data;
+    }
+
+    public static com.alibaba.fastjson.JSONArray getAdvice(String url,
+                                      String params) throws Exception {
+        String message = new HttpRequest().doGet(url, params);
+        Map<Object, Object> jsonMap = JsonUtil.JsontoMap(message);
+//        System.out.println("j: "+jsonMap);
+        //Map<Object, Object> data = new HashMap<Object, Object>();
+        com.alibaba.fastjson.JSONArray list= new com.alibaba.fastjson.JSONArray();
+        if ("Success".equals(jsonMap.get("message"))) {
+            list =(com.alibaba.fastjson.JSONArray) jsonMap.get("data");
+
+//			data = JsonUtil.JsontoMap(list.get(1));
+//			System.out.println("data "+ jsonMap.get("data"));
+//			System.out.println(data.get("adviceId"));
+//			data.put("message", "sucess");
+
+        }
+        return list;
+
     }
 }

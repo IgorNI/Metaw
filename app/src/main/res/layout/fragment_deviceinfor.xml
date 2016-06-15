@@ -45,11 +45,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="@string/label_device_information"
+            android:text="@string/Welcome"
             android:id="@+id/textView5"
             android:layout_gravity="center_horizontal" />
 
-       <!-- <TableLayout
+        <TableLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent" >
 
@@ -331,7 +331,6 @@
             android:layout_height="wrap_content"
             style="?android:attr/buttonBarButtonStyle"
             android:text="@string/label_led_off"
-            android:id="@+id/led_stop" />-->
-
+            android:id="@+id/led_stop" />
     </LinearLayout>
 </ScrollView>

@@ -251,7 +251,7 @@
   <string name="navigation_drawer_close">Close navigation drawer</string>
   <string name="navigation_drawer_mbientlab_website">https://mbientlab.com</string>
   <string name="navigation_fragment_home">主页</string>
-  <string name="navigation_fragment_accelerometer">查看步数</string>
+  <string name="navigation_fragment_accelerometer">计步</string>
   <string name="navigation_fragment_barometer">Barometer</string>
   <string name="navigation_fragment_color_detector">Color Detector</string>
   <string name="navigation_fragment_gpio">查看压力</string>
@@ -271,11 +271,13 @@
   <string name="state">状态</string>
   <string name="select_chart">Select Chart</string>
   <string name="myinformtion">我</string>
-  <string name="setting">设置</string>
+  <string name="about">关于设备</string>
   <string name="set_post_time">设置间隔</string>
   <string name="post_time_1s">1秒</string>
   <string name="post_time_10s">10秒</string>
   <string name="post_time_60s">60秒</string>
   <string name="post_data">上传数据</string>
+  <string name="getadvice">获取建议</string>
+  <string name="Welcome">欢迎</string>
 
 </resources>

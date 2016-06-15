@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -12,12 +13,12 @@
             android:layout_height="wrap_content"
             android:text="姓名"
             android:id="@+id/tv_patientName" />
-        <TextView
+        <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
             android:ems="10"
-            android:id="@+id/show_patientName"
+            android:id="@+id/et_patientName"
             android:layout_weight="1" />
 
     </LinearLayout>
@@ -32,12 +33,12 @@
             android:text="昵称"
             android:id="@+id/tv_userName" />
 
-        <TextView
+        <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
             android:ems="10"
-            android:id="@+id/show_userName"
+            android:id="@+id/et_userName"
             android:layout_weight="1"  />
     </LinearLayout>
 
@@ -51,12 +52,12 @@
             android:text="手机号"
             android:id="@+id/tv_mobile" />
 
-        <TextView
+        <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:inputType="phone"
             android:ems="10"
-            android:id="@+id/show_mobile"
+            android:id="@+id/et_mobile"
             android:layout_weight="1" />
 
     </LinearLayout>
@@ -71,12 +72,12 @@
             android:text="密码"
             android:id="@+id/tv_password" />
 
-        <TextView
+        <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:inputType="textPassword"
             android:ems="10"
-            android:id="@+id/show_password"
+            android:id="@+id/et_password"
             android:layout_weight="1" />
 
     </LinearLayout>
@@ -96,7 +97,12 @@
             android:layout_width="wrap_content"
             android:calendarViewShown="false"
             android:layout_height="339dp"
-            android:id="@+id/datePicker">
-        </DatePicker>
+            android:id="@+id/datePicker"></DatePicker>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="确定"
+            android:id="@+id/confirm_btn"/>
     </LinearLayout>
-</LinearLayout>
+    </LinearLayout>
