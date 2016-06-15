@@ -9,14 +9,9 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import org.json.JSONArray;
-
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.Map;
 
-import httpclient.common.JsonUtil;
-import httpclient.http.HttpRequest;
 import httpclient.http.HttpUrl;
 import httpclient.service.PatientService;
 
@@ -44,7 +39,7 @@ public class RegisterActivity extends Activity{
         thread = new Thread(new VisitWebRunnable());
         confirmBtn = (Button) findViewById(R.id.confirm_btn);
         patientName = (EditText) findViewById(R.id.et_patientName);
-        userName = (EditText) findViewById(R.id.et_userName);
+
         phoneNum = (EditText) findViewById(R.id.et_mobile);
         password = (EditText) findViewById(R.id.et_password);
         datePicker = (DatePicker) findViewById(R.id.datePicker);

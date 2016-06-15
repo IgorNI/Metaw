@@ -76,30 +76,16 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
     private final static String FRAGMENT_KEY= "com.mbientlab.metawear.app.NavigationActivity.FRAGMENT_KEY";
     private final static Map<Integer, Class<? extends ModuleFragmentBase>> FRAGMENT_CLASSES;
 
-    private static MetaWearBoard metaWearBoard;
-    private static Accelerometer accelModule = null;
-    private static Gpio gpioModule = null;
-    private static Timer timerModule;
-    private AsyncOperation<Timer.Controller> timerController;
-    private static AsyncOperation<RouteManager> analogRoute;
-    private static AsyncOperation<RouteManager> acceleRoute;
-    private static final byte GPIO_PIN = 0;
-
-    private static Intent countStepIntent;
-    private static Intent pressureIntent;
-    private static Intent postDataIntent;
-
 
     static {
         Map<Integer, Class<? extends ModuleFragmentBase>> tempMap= new LinkedHashMap<>();
         tempMap.put(R.id.nav_home, HomeFragment.class);
         tempMap.put(R.id.nav_accelerometer, AccelerometerFragment.class);
         tempMap.put(R.id.nav_gpio, GpioPressueFragment.class);
-        tempMap.put(R.id.nav_me,LoginFragment.class);
+        tempMap.put(R.id.nav_me,MyInformationFragment.class);
         tempMap.put(R.id.nav_advice,GetAdviceFragment.class);
-        tempMap.put(R.id.nav_setting,DeviceInformation.class);
-
-
+        tempMap.put(R.id.nav_about,DeviceInformation.class);
+        tempMap.put(R.id.nav_setting,SettingFragment.class);
         FRAGMENT_CLASSES= Collections.unmodifiableMap(tempMap);
     }
 
@@ -379,10 +365,6 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
 
         btDevice= getIntent().getParcelableExtra(EXTRA_BT_DEVICE);
         getApplicationContext().bindService(new Intent(this, MetaWearBleService.class), this, BIND_AUTO_CREATE);
-        /*postDataIntent = new Intent(this,MyIntentService.class);
-        startService(postDataIntent);*/
-        /*countStepIntent = new Intent(this,CountStepService.class);
-        startService(countStepIntent);*/
 
 
     }

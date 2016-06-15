@@ -14,7 +14,6 @@ import android.widget.Toast;
 import com.mbientlab.metawear.UnsupportedModuleException;
 import com.mbientlab.metawear.app.help.HelpOptionAdapter;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,14 +23,23 @@ import httpclient.service.PatientService;
 /**
  * Created by nilif on 2016/5/18.
  */
-public class LoginFragment extends ModuleFragmentBase implements View.OnClickListener {
+public class MyInformationFragment extends ModuleFragmentBase implements View.OnClickListener {
     private static final String TAG = "click";
     private Button LoginBtn;
     private Button RegisterBtn;
     private EditText et_phoneNum;
     private EditText et_password;
-    private Thread thread;
+
+    private EditText show_Name;
+    private EditText show_phone;
+    private EditText show_Birthday;
+    private Thread Loginthread;
+    private Thread getInforThread;
+    private Thread registerThread;
     private String phone;
+    private View loginView;
+    private View myInforView;
+    private View register;
 
     @Override
     public void onAttach(Context context) {
@@ -42,15 +50,23 @@ public class LoginFragment extends ModuleFragmentBase implements View.OnClickLis
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_login, container, false);
-        thread = new Thread(new VisitWebRunnable());
+        View v = inflater.inflate(R.layout.fragment_myinfomation, container, false);
+        Loginthread = new Thread(new LoginRunnable()); // 初始化登陆的线程
+       // registerThread = new Thread(new registerRunnable()); // 初始化注册的线程
         LoginBtn = (Button) v.findViewById(R.id.login_btn);
         RegisterBtn = (Button) v.findViewById(R.id.register_btn);
         et_phoneNum = (EditText) v.findViewById(R.id.input_phoneNum);
         et_password = (EditText) v.findViewById(R.id.input_password);
+        show_Name = (EditText) v.findViewById(R.id.et_patientName);
+        show_phone = (EditText) v.findViewById(R.id.et_mobile);
+        show_Birthday = (EditText) v.findViewById(R.id.et_birthday);
+        loginView = v.findViewById(R.id.login);
+        myInforView = v.findViewById(R.id.me);
+        register = v.findViewById(R.id.regist);
         phone = et_phoneNum.getText().toString();
         LoginBtn.setOnClickListener(this);
         RegisterBtn.setOnClickListener(this);
+
         return v;
     }
 
@@ -70,8 +86,13 @@ public class LoginFragment extends ModuleFragmentBase implements View.OnClickLis
                     Toast.makeText(getActivity().getApplicationContext(), "请输入电话或者密码", Toast.LENGTH_SHORT).show();
                 }else {
                     // 与服务器端进行匹配，如果相同，则ok，
-                        thread.start();
+                    Loginthread.start();
+                    /*loginView.setVisibility(View.GONE);
+                    myInforView.setVisibility(View.VISIBLE);*/
 
+                        //Loginthread.interrupt();
+
+                    /*getInforThread.start();*/
 
                     /*FragmentManager manager = getFragmentManager();
                     FragmentTransaction ft =manager.beginTransaction();
@@ -85,37 +106,46 @@ public class LoginFragment extends ModuleFragmentBase implements View.OnClickLis
         }
     }
 
-    private class VisitWebRunnable implements Runnable {
+    private class LoginRunnable implements Runnable {
         @Override
         public void run() {
-            String params = "{\"mobile\":\"15733333333\",\"password\":\"123456\"}";
-
-//			Map<String, String> user = PatientService.Register(HttpUrl.PATIENT_REGISTER, params);
-
             HashMap<String, String> dataMap = new HashMap<String, String>();
             dataMap.put("mobile", et_phoneNum.getText().toString().trim());
             dataMap.put("password", et_password.getText().toString().trim());
-//			PatientService.Login(HttpUrl.PATIENT_LOGIN, dataMap);
 
-//			Map<String, String> user =PatientService.getPatientInfoByMobile(HttpUrl.PATIENT_GETINFO,
-//					"15700000000");
-
-//			Map<String, String> user = PatientService.getPatientInfoByMobile(HttpUrl.PATIENT_GETINFO, "15757115922");// 首先获取patientId
-//			System.out.println(user.get("patientId"));
-//			params = "{\"patientId\":\"" + user.get("patientId")
-//					+ "\",\"mobile\":\"15700000000\"}";
-//			Map<String, String> data = PatientService.updatePatientInfo(HttpUrl.PATIENT_UPDATE, params);// 然后根据patientId修改数据
-//
-            //不清楚
-            /*params = "{\"mobile\":\"" + et_phoneNum.getText().toString() + "\"," +
-                    "\"password\":\"" + et_password.getText().toString() + "\"," +
-                    "\"time\":\""+ 0 +"\"}";*/
             Map<Object, Object> user = PatientService.Login(HttpUrl.PATIENT_LOGIN, dataMap);
-            ArrayList<String> arrayList = new ArrayList<String>();
+
+//            ArrayList<String> arrayList = new ArrayList<String>();
             Intent intent = new Intent();
             intent.setClass(getActivity(),MyInforActivity.class);
             intent.putExtra("Login_phoneNum",phone);
             getActivity().startActivity(intent);
         }
     }
+   /* private class registerRunnable implements Runnable {
+        @Override
+        public void run() {
+            String params ;
+
+
+
+
+            params = "{\"mobile\":\"" + phoneNum.getText().toString() + "\"," +
+                    "\"password\":\"" + password.getText().toString() + "\"," +
+                    "\"patientName\":\""+patientName.getText().toString()+"\"," +
+                    "\"province\":\"22.0\",\"city\":\"" + 0 + "\"," +
+                    "\"county\":\"" +32 +"\"," +
+                    "\"details\":\""+ 32+"\","+
+                    "\"birthday\":\""+ 0 +"\","+
+                    "\"isNLFData\":\""+ true+"\"}";
+
+            Map<Object, Object> user = PatientService.Register(HttpUrl.PATIENT_REGISTER, params);
+            Intent intent = new Intent(RegisterActivity.this,MyInforActivity.class);
+            intent.putExtra("Login_phoneNum",phoneNum.getText().toString());
+            startActivity(intent);
+        }
+    }*/
+
+
+
 }

@@ -23,24 +23,6 @@
 
 </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="昵称"
-        android:id="@+id/tv_userName" />
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:ems="10"
-        android:id="@+id/et_userName"
-        android:layout_weight="1"  />
-    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"

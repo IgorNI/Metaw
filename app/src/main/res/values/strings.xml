@@ -62,7 +62,7 @@
   <string name="config_desc_pull_mode">Pull mode used to ensure an input signal is in a valid logic range</string>
   <string name="config_name_output_control">Output Control</string>
   <string name="config_desc_output_control">Set the output voltage to logical high, or clear to a logical low</string>
-  <string name="config_name_gpio_read_mode">Read Mode</string>
+  <string name="config_name_gpio_read_mode">读取类型</string>
   <string name="config_desc_gpio_read_mode">How to read the input data from the gpio pin</string>
   <string name="config_name_ad_device_name">Device Name</string>
   <string name="config_desc_ad_device_name">Set the advertising name</string>
@@ -200,20 +200,20 @@
   <string name="label_device_information">Device Information</string>
   <string name="label_haptic_start_motor">Start Motor</string>
   <string name="label_haptic_start_buzzer">Start Buzzer</string>
-  <string name="label_manufacturer">Manufacturer</string>
-  <string name="label_model_number">Model Number</string>
-  <string name="label_serial_number">Serial Number</string>
-  <string name="label_firmware_revision">Firmware Revision</string>
-  <string name="label_hardware_revision">Hardware Revision</string>
-  <string name="label_mac_address">MAC Address</string>
+  <string name="label_manufacturer">厂商</string>
+  <string name="label_model_number">模型号</string>
+  <string name="label_serial_number">序列号</string>
+  <string name="label_firmware_revision">固件版本</string>
+  <string name="label_hardware_revision">硬件版本</string>
+  <string name="label_mac_address">MAC 地址</string>
   <string name="label_rssi">RSSI</string>
-  <string name="label_battery_level">Battery Level</string>
+  <string name="label_battery_level">电池容量</string>
   <string name="label_switch_pressed">Pressed</string>
   <string name="label_switch_released">Released</string>
   <string name="label_device_section_led">Led</string>
   <string name="label_device_section_switch">Switch</string>
   <string name="label_device_section_haptic">Haptic</string>
-  <string name="label_device_update">Update Firmware</string>
+  <string name="label_device_update">升级固件</string>
   <string name="label_device_reset">Reset</string>
   <string name="label_led_red_on">Red On</string>
   <string name="label_led_blue_on">Blue On</string>
@@ -237,9 +237,9 @@
   <string name="label_cancel">Cancel</string>
   <string name="label_commit">Commit</string>
   <string name="label_ok">OK</string>
-  <string name="label_start_sample">sampling</string>
-  <string name="label_clear">Clear</string>
-  <string name="label_save">Save</string>
+  <string name="label_start_sample">开始采集</string>
+  <string name="label_clear">清除</string>
+  <string name="label_save">保存</string>
   <string name="label_yes">Yes</string>
   <string name="label_no">No</string>
   <string name="label_sodium">N/A</string>
@@ -269,7 +269,7 @@
   <string name="step">步数</string>
   <string name="show_time">时间</string>
   <string name="state">状态</string>
-  <string name="select_chart">Select Chart</string>
+  <string name="select_chart">选择图表</string>
   <string name="myinformtion">我</string>
   <string name="about">关于设备</string>
   <string name="set_post_time">设置间隔</string>
@@ -279,5 +279,6 @@
   <string name="post_data">上传数据</string>
   <string name="getadvice">获取建议</string>
   <string name="Welcome">欢迎</string>
+  <string name="setting">设置</string>
 
 </resources>

@@ -30,25 +30,6 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="昵称"
-            android:id="@+id/tv_userName" />
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            android:ems="10"
-            android:id="@+id/et_userName"
-            android:layout_weight="1"  />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:text="手机号"
             android:id="@+id/tv_mobile" />
 
@@ -62,25 +43,7 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="密码"
-            android:id="@+id/tv_password" />
 
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="textPassword"
-            android:ems="10"
-            android:id="@+id/et_password"
-            android:layout_weight="1" />
-
-    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -90,19 +53,20 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="生日"
+            android:text="注册时间"
             android:id="@+id/tv_birthdate" />
 
-        <DatePicker
-            android:layout_width="wrap_content"
-            android:calendarViewShown="false"
-            android:layout_height="339dp"
-            android:id="@+id/datePicker"></DatePicker>
-
-        <Button
+        <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="确定"
-            android:id="@+id/confirm_btn"/>
+            android:inputType="datetime"
+            android:ems="10"
+            android:id="@+id/et_birthday"
+            android:layout_weight="1" />
     </LinearLayout>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="返回"
+        android:id="@+id/back_btn"/>
     </LinearLayout>
