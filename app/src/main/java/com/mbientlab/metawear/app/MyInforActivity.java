@@ -42,14 +42,14 @@ public class MyInforActivity extends Activity{
         et_mobile = (EditText) findViewById(R.id.et_mobile);
         et_birthday = (EditText) findViewById(R.id.et_birthday);
         Button backBtn = (Button) findViewById(R.id.back_btn);
-        backBtn.setOnClickListener(new View.OnClickListener() {
+        /*backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
                 intent.setClass(MyInforActivity.this,NavigationActivity.class);
                 startActivity(intent);
             }
-        });
+        });*/
         Intent intent = getIntent();
         phone =  intent.getStringExtra("Login_phoneNum");
         Thread thread = new Thread(new GetInforRunnable());
@@ -60,7 +60,7 @@ public class MyInforActivity extends Activity{
         @Override
         public void run() {
              user = PatientService.getPatientInfoByMobile(HttpUrl.PATIENT_GETINFO, phone);
-            System.out.println(user.get("patientName").toString());
+           // System.out.println(user.get("patientName").toString());
             handler.post(runnableUi);
             //et_name.setText(user.get("patientName").toString());
             //et_mobile.setText(user.get("mobile").toString());

@@ -61,7 +61,6 @@ public class AccelerometerFragment extends ThreeAxisChartFragment {
                     leftAxis.setAxisMaxValue(MMA845Q_RANGES[rangeIndex]);
                     leftAxis.setAxisMinValue(-MMA845Q_RANGES[rangeIndex]);
                 }
-
                 refreshChart(false);
             }
 

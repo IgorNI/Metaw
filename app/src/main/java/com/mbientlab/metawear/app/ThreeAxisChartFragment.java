@@ -453,7 +453,13 @@ public abstract class ThreeAxisChartFragment extends ModuleFragmentBase {
                     TextView textView = (TextView) view.findViewById(R.id.ShowStepNum);
                     textView.setText(String.valueOf(mStep*2));
                     TextView textView1 = (TextView) view.findViewById(R.id.showState);
-                    textView1.setText(String.valueOf(STATE));
+                    if(STATE == 1){
+                        textView1.setText("站");
+                    }
+                    if (STATE == 2){
+                        textView1.setText("坐");
+                    }
+
 
                     if (streamRouteManager != null) {
                         streamRouteManager.remove();

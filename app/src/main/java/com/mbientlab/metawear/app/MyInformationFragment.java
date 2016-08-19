@@ -63,7 +63,7 @@ public class MyInformationFragment extends ModuleFragmentBase implements View.On
         loginView = v.findViewById(R.id.login);
         myInforView = v.findViewById(R.id.me);
         register = v.findViewById(R.id.regist);
-        phone = et_phoneNum.getText().toString();
+
         LoginBtn.setOnClickListener(this);
         RegisterBtn.setOnClickListener(this);
 
@@ -114,7 +114,7 @@ public class MyInformationFragment extends ModuleFragmentBase implements View.On
             dataMap.put("password", et_password.getText().toString().trim());
 
             Map<Object, Object> user = PatientService.Login(HttpUrl.PATIENT_LOGIN, dataMap);
-
+            phone = et_phoneNum.getText().toString();
 //            ArrayList<String> arrayList = new ArrayList<String>();
             Intent intent = new Intent();
             intent.setClass(getActivity(),MyInforActivity.class);
@@ -122,29 +122,6 @@ public class MyInformationFragment extends ModuleFragmentBase implements View.On
             getActivity().startActivity(intent);
         }
     }
-   /* private class registerRunnable implements Runnable {
-        @Override
-        public void run() {
-            String params ;
-
-
-
-
-            params = "{\"mobile\":\"" + phoneNum.getText().toString() + "\"," +
-                    "\"password\":\"" + password.getText().toString() + "\"," +
-                    "\"patientName\":\""+patientName.getText().toString()+"\"," +
-                    "\"province\":\"22.0\",\"city\":\"" + 0 + "\"," +
-                    "\"county\":\"" +32 +"\"," +
-                    "\"details\":\""+ 32+"\","+
-                    "\"birthday\":\""+ 0 +"\","+
-                    "\"isNLFData\":\""+ true+"\"}";
-
-            Map<Object, Object> user = PatientService.Register(HttpUrl.PATIENT_REGISTER, params);
-            Intent intent = new Intent(RegisterActivity.this,MyInforActivity.class);
-            intent.putExtra("Login_phoneNum",phoneNum.getText().toString());
-            startActivity(intent);
-        }
-    }*/
 
 
 
